@@ -13,9 +13,7 @@ int radius = 100; // Radius of the circle
 
 // Function to plot symmetrical points
 void plotPoint(int x, int y) {
-    glBegin(GL_POINTS);
     glVertex2i(x, y);
-    glEnd();
 }
 
 // 1️⃣ Cartesian Equation Method: (x-h)^2 + (y-k)^2 = r^2
@@ -92,6 +90,7 @@ void drawCircle_Midpoint(int h, int k, int r) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POINTS);
 
     // Drawing all four circles
 //    glColor3f(1.0, 0.0, 0.0); // Red
@@ -105,7 +104,7 @@ void display() {
 //
 //    glColor3f(1.0, 1.0, 0.0); // Yellow
 //    drawCircle_Midpoint(centerX, centerY, radius);
-
+    glEnd();
     glFlush();
 }
 
