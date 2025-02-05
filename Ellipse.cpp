@@ -100,7 +100,7 @@ void midpoint_method(double a, double b, double h, double k)
 void rotatePoint(double &x, double &y, double h, double k, double alpha)
 {
     double rad = alpha * M_PI / 180.0; // Convert degrees to radians
-    double x_new = h + (x - h) * cos(rad) - (y - k) * sin(rad);
+    double x_new = h + (x - h) * cos(rad) - (y - k) * sin(rad);  //center (h,k) and alpha rotate
     double y_new = k + (x - h) * sin(rad) + (y - k) * cos(rad);
     x = x_new;
     y = y_new;
@@ -115,7 +115,7 @@ void midpoint_method_rotate(double a, double b, double h, double k, double alpha
     // First region: When slope is less than 1 (x moves faster than y)
     while (dx < dy)
     {
-        //shift
+        //all quard point for slope less than 1
         double x1 = x + h, y1 = y + k;
         double x2 = -x + h, y2 = y + k;
         double x3 = x + h, y3 = -y + k;
@@ -202,13 +202,13 @@ static void display(void)
     glColor3f(0.0, 1.0, 0.0);  // Green color
     glBegin(GL_POINTS);
 
-    double a = 100.0, b = 50.0;  // Semi-major and semi-minor axes
-    double h = 40.0, k = 0.0;  // Ellipse center
-    double alpha=60.0; //in degree
+    double a = 10.0, b = 5.0;  // Semi-major and semi-minor axes
+    double h = -9.0, k = 9.0;  // Ellipse center
+    double alpha=45.0; //in degree
 
 
-    midpoint_method(a, b, h, k);
-    //midpoint_method_rotate(a,b,h,k,alpha);
+//    midpoint_method(a, b, h, k);
+    midpoint_method_rotate(a,b,h,k,alpha);
 
     glEnd();
     glFlush();
@@ -220,7 +220,7 @@ void init()
     glClearColor(0.0, 0.0, 0.0, 0.0);  // Set background color to black
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-200.0, 200.0, -200.0, 200.0, -10.0, 10.0);  // Define coordinate system
+    glOrtho(-20.0, 20.0, -20.0, 20.0, -10.0, 10.0);  // Define coordinate system
 }
 
 // Main function
