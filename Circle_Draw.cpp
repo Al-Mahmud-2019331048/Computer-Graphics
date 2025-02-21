@@ -1,3 +1,5 @@
+//Abdulla Al Mahmud
+
 #include <GL/glut.h>   // OpenGL Library for Rendering
 #include <cmath>
 #include <iostream>
