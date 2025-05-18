@@ -1,0 +1,20 @@
+## SCAN-CONVERTING A LINE
+Direct Use of the Line Equation
+DDA Algorithm*
+Bresenham's Line Algorithm*   
+
+## SCAN-CONVERTING A CIRCLE
+Linear
+Polar
+Bresenham's Circle Algorithm* (variation)
+Midpoint
+Arc & Sector
+
+## SCAN-CONVERTING AN ELLIPSE
+
+
+SCAN-CONVERTING A RECTANGLE
+
+Cohen-Sutherland Algorithm - line clipping
+
+Sutherland-Hodgman Algorithm
