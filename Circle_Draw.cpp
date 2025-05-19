@@ -8,7 +8,7 @@ int centerX = 0, centerY = 0; // Center of the circle
 int radius = 100; // Radius of the circle
 
 // Function to plot symmetrical points
-void plotPoint(float x, float y)
+void setPixel(float x, float y)
 {
     glVertex3f(x, y, 0.0);
 }
@@ -20,14 +20,14 @@ void drawCircle_Cartesian(int h, int k, int r)
     for (x = 0; x <= r/sqrt(2); x++)
     {
         y = round(sqrt(r * r - x * x));
-        plotPoint(h + x, k + y);
-//        plotPoint(h + x, k - y);
-//        plotPoint(h - x, k + y);
-//        plotPoint(h - x, k - y);
-//        plotPoint(h + y, k + x);
-//        plotPoint(h + y, k - x);
-//        plotPoint(h - y, k + x);
-//        plotPoint(h - y, k - x);
+        setPixel(h + x, k + y);
+//        setPixel(h + x, k - y);
+//        setPixel(h - x, k + y);
+//        setPixel(h - x, k - y);
+//        setPixel(h + y, k + x);
+//        setPixel(h + y, k - x);
+//        setPixel(h - y, k + x);
+//        setPixel(h - y, k - x);
     }
 }
 
@@ -39,46 +39,63 @@ void drawCircle_Polar(int h, int k, int r)
     {
         int x = round(r * cos(theta));
         int y = round(r * sin(theta));
-        plotPoint(h + x, k + y);
-//        plotPoint(h + x, k - y);
-//        plotPoint(h - x, k + y);
-//        plotPoint(h - x, k - y);
-//        plotPoint(h + y, k + x);
-//        plotPoint(h + y, k - x);
-//        plotPoint(h - y, k + x);
-//        plotPoint(h - y, k - x);
+        setPixel(h + x, k + y);
+//        setPixel(h + x, k - y);
+//        setPixel(h - x, k + y);
+//        setPixel(h - x, k - y);
+//        setPixel(h + y, k + x);
+//        setPixel(h + y, k - x);
+//        setPixel(h - y, k + x);
+//        setPixel(h - y, k - x);
     }
 }
 
 // 3️⃣ Bresenham's Circle Algorithm 90-45
 void drawCircle_Bresenham(int h, int k, int r)
 {
-    int x = 0, y = r;
-    int d = 3 - 2 * r;
+    int x=0,y=r;
+    int d=3-2*r;
 
-    while (x <= y)
+    while(x<=y)
     {
-//        plotPoint(h + x, k + y);  //90 45
-        plotPoint(h - x, k + y);  //
-//        plotPoint(h + x, k - y);
-//        plotPoint(h - x, k - y);
-//        plotPoint(h + y, k + x);
-//        plotPoint(h - y, k + x);
-//        plotPoint(h + y, k - x);
-//        plotPoint(h - y, k - x);
-
-        if (d < 0)
-            d += 4 * x + 6;
+        setPixel(h+x,k+y);
+        if(d<0)
+        {
+            x++;
+            d+=4*x+6;
+        }
         else
         {
-            d += 4 * (x - y) + 10;
+            x++;
             y--;
+            d+=4*(x-y)+10;
         }
-        x++;
     }
 }
 
-void drawCircle_Bresenham_15_60(int h,int k,int r)
+void drawCircle_Bresenham_0_45(int h, int k, int r)
+{
+    int x=0,y=r;
+    int d=3-2*r;
+
+    while(x<=y)
+    {
+        setPixel(h+y,k+x);
+        if(d<0)
+        {
+            x++;
+            d+=4*x+6;
+        }
+        else
+        {
+            x++;
+            y--;
+            d+=4*(x-y)+10;
+        }
+    }
+}
+
+void drawCircle_Bresenham_15_601(int h,int k,int r)
 {
     // 60 to 45
     int x=(r * cos(60*M_PI/180.0));
@@ -86,7 +103,7 @@ void drawCircle_Bresenham_15_60(int h,int k,int r)
     int d = 3 - 2 * r;
     while(x<=y)
     {
-        plotPoint(h + x, k + y);
+        setPixel(h + x, k + y);
         if (d < 0)
             d += 4 * x + 6;
         else
@@ -102,7 +119,7 @@ void drawCircle_Bresenham_15_60(int h,int k,int r)
     d = 3 - 2 * r;
     while(y<=x)
     {
-        plotPoint(h + x, k + y);
+        setPixel(h + x, k + y);
         if (d < 0)
             d += 4 * y + 6;
         else
@@ -114,15 +131,16 @@ void drawCircle_Bresenham_15_60(int h,int k,int r)
     }
 }
 
-void drawCircle_Bresenham_120_150(int h,int k,int r)
+
+void drawCircle_Bresenham_15_60(int h,int k,int r)
 {
-    // 60 to 45 - for reflection
+    // 60 to 45
     int x=(r * cos(60*M_PI/180.0));
     int y=(r * sin(60*M_PI/180.0));
     int d = 3 - 2 * r;
     while(x<=y)
     {
-        plotPoint(h - x, k + y);  // -x for reflection
+        setPixel(h + x, k + y); // 60 to 45
         if (d < 0)
             d += 4 * x + 6;
         else
@@ -132,21 +150,57 @@ void drawCircle_Bresenham_120_150(int h,int k,int r)
         }
         x++;
     }
-    // 30 to 45
-    x=(r * cos(30*M_PI/180.0));
-    y=(r * sin(30*M_PI/180.0));
+
+    x=(r * cos(75*M_PI/180.0));
+    y=(r * sin(75*M_PI/180.0));
     d = 3 - 2 * r;
-    while(y<=x)
+    while(x<=y)
     {
-        plotPoint(h - x, k + y);  //-x
+        setPixel(h+y,k+x);  // 15 to 45  (75to45)
         if (d < 0)
-            d += 4 * y + 6;
+            d += 4 * x + 6;
         else
         {
-            d += 4 * (y - x) + 10;
-            x--;
+            d += 4 * (x - y) + 10;
+            y--;
         }
-        y++;
+        x++;
+    }
+}
+
+void drawCircle_Bresenham_120_160(int h,int k,int r)
+{
+    // 60 to 45 - for reflection
+    int x=(r * cos(60*M_PI/180.0));
+    int y=(r * sin(60*M_PI/180.0));
+    int d = 3 - 2 * r;
+    while(x<=y)
+    {
+        setPixel(h - x, k + y);  // -x for reflection
+        if (d < 0)
+            d += 4 * x + 6;
+        else
+        {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
+    }
+
+    x=(r * cos(70*M_PI/180.0));
+    y=(r * sin(70*M_PI/180.0));
+    d = 3 - 2 * r;
+    while(x<=y)
+    {
+        setPixel(-(h+y),k+x);  //swap and -(x) for reflection
+        if (d < 0)
+            d += 4 * x + 6;
+        else
+        {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
     }
 }
 
@@ -158,7 +212,7 @@ void drawCircle_Bresenham_210_260(int h,int k,int r)
     int d = 3 - 2 * r;
     while(x<=y)
     {
-        plotPoint(h - x, k - y);  // -x and -y for reflection
+        setPixel(-(h+x), -(k+y) );  // -(x) and -(y) for reflection respect to y axis and x axis respectively
         if (d < 0)
             d += 4 * x + 6;
         else
@@ -168,33 +222,35 @@ void drawCircle_Bresenham_210_260(int h,int k,int r)
         }
         x++;
     }
-    // 30 to 45
-    x=(r * cos(30*M_PI/180.0));
-    y=(r * sin(30*M_PI/180.0));
+
+    x=(r * cos(60*M_PI/180.0));
+    y=(r * sin(60*M_PI/180.0));
     d = 3 - 2 * r;
-    while(y<=x)
+    while(x<=y)
     {
-        plotPoint(h - x, k - y);  //-x and -y for reflection
+        setPixel(-(h+y), -(k+x) );  // swap, reflec x and y axis
         if (d < 0)
-            d += 4 * y + 6;
+            d += 4 * x + 6;
         else
         {
-            d += 4 * (y - x) + 10;
-            x--;
+            d += 4 * (x - y) + 10;
+            y--;
         }
-        y++;
+        x++;
     }
+
+
 }
 
 void drawCircle_Bresenham_280_340(int h,int k,int r)
 {
-    // 80 to 45 - for reflection
+    // 80to45 - 280to315
     int x=(r * cos(80*M_PI/180.0));
     int y=(r * sin(80*M_PI/180.0));
     int d = 3 - 2 * r;
     while(x<=y)
     {
-        plotPoint(h + x, k - y);  // -x and -y for reflection
+        setPixel(h + x, -(k + y));  //  -(y) for reflection
         if (d < 0)
             d += 4 * x + 6;
         else
@@ -204,35 +260,38 @@ void drawCircle_Bresenham_280_340(int h,int k,int r)
         }
         x++;
     }
-    // 20 to 45
-    x=(r * cos(20*M_PI/180.0));
-    y=(r * sin(20*M_PI/180.0));
+    // 20to45 or 70to45 - 315to340
+    x=(r * cos(70*M_PI/180.0));
+    y=(r * sin(70*M_PI/180.0));
     d = 3 - 2 * r;
-    while(y<=x)
+    while(x<=y)
     {
-        plotPoint(h + x, k - y);  //-x and -y for reflection
+        setPixel(h + y, -(k + x));  // swap and -(y) for reflection
         if (d < 0)
-            d += 4 * y + 6;
+            d += 4 * x + 6;
         else
         {
-            d += 4 * (y - x) + 10;
-            x--;
+            d += 4 * (x - y) + 10;
+            y--;
         }
-        y++;
+        x++;
     }
 }
 
-void drawCircle_BresenhamArc0to30(int h, int k, int r) {
+void drawCircle_BresenhamArc0to30(int h, int k, int r)
+{
     int x = r;
     int y  = 0;
     int d = 3 - 2 * r;
     int limit = r*cos(30*M_PI/180.0);
 
-    while (x >= limit) {
-        plotPoint(h + x, k + y);
+    while (x >= limit)
+    {
+        setPixel(h + x, k + y);
         if (d < 0)
             d += 4 * y + 6;
-        else {
+        else
+        {
             d += 4 * (y - x) + 10;
             x--;
         }
@@ -248,24 +307,9 @@ void drawCircle_Bresenham_150_250(int h, int k, int r)
     int d = 3 - 2 * r;
     int limit = r*cos(30*M_PI/180.0);
 
-    while (x >= limit) {
-        plotPoint(h - x, k + y);
-        if (d < 0)
-            d += 4 * y + 6;
-        else {
-            d += 4 * (y - x) + 10;
-            x--;
-        }
-        y++;
-    }
-
-    //0 - 45 for 180 - 225
-    x=(r * cos(0*M_PI/180.0));
-    y=(r * sin(0*M_PI/180.0));
-    d = 3 - 2 * r;
-    while(y<=x)
+    while (x >= limit)
     {
-        plotPoint(h - x, k - y);  // -x and -y for reflection
+        setPixel(h - x, k + y);
         if (d < 0)
             d += 4 * y + 6;
         else
@@ -275,13 +319,14 @@ void drawCircle_Bresenham_150_250(int h, int k, int r)
         }
         y++;
     }
-    //70- 45 for 225 - 250
-    x=(r * cos(70*M_PI/180.0));
-    y=(r * sin(70*M_PI/180.0));
-    d = 3 - 2 * r;
+
+    //90to45 for 0to45 - 180to225
+    x=(r * cos(90*M_PI/180.0));
+    y=(r * sin(90*M_PI/180.0));
+    d= 3 - 2 * r;
     while(x<=y)
     {
-        plotPoint(h - x, k - y);  // -x and -y for reflection
+        setPixel(-(h+y), -(k + x));  // swap and -(x), -(y) for reflection
         if (d < 0)
             d += 4 * x + 6;
         else
@@ -291,6 +336,24 @@ void drawCircle_Bresenham_150_250(int h, int k, int r)
         }
         x++;
     }
+
+    //70to45 for 225to250
+    x=(r * cos(70*M_PI/180.0));
+    y=(r * sin(70*M_PI/180.0));
+    d= 3 - 2 * r;
+    while(x<=y)
+    {
+        setPixel(-(h+x), -(k + y));  // -(x), -(y) for reflection
+        if (d < 0)
+            d += 4 * x + 6;
+        else
+        {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
+    }
+
 }
 
 
@@ -304,14 +367,14 @@ void drawCircle_Midpoint(int h, int k, int r)
 
     while (x <= y)
     {
-        plotPoint(h + x, k + y);
-        plotPoint(h - x, k + y);
-        plotPoint(h + x, k - y);
-        plotPoint(h - x, k - y);
-        plotPoint(h + y, k + x);
-        plotPoint(h - y, k + x);
-        plotPoint(h + y, k - x);
-        plotPoint(h - y, k - x);
+        setPixel(h + x, k + y);
+        setPixel(h - x, k + y);
+        setPixel(h + x, k - y);
+        setPixel(h - x, k - y);
+        setPixel(h + y, k + x);
+        setPixel(h - y, k + x);
+        setPixel(h + y, k - x);
+        setPixel(h - y, k - x);
 
         if (d < 0)
             d += 2 * x + 3;
@@ -331,6 +394,8 @@ void display()
 
     // Draw X and Y axes in Green
     glColor3f(0.0, 1.0, 0.0);
+
+    //draw coordinate lines (x and y)
     glBegin(GL_LINES);
     glVertex2f(-200, 0);
     glVertex2f(200, 0); // X-axis
@@ -338,15 +403,26 @@ void display()
     glVertex2f(0, 200); // Y-axis
     glVertex2f(200, 200);
     glVertex2f(-200, -200); // X=Y-axis
+    glVertex2f(200, -200);
+    glVertex2f(-200, 200); // X=Y-axis
     glEnd();
 
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POINTS);
 
     glColor3f(0.0, 0.0, 1.0); // Blue
-    drawCircle_Polar(centerX, centerY, radius);
 
+    drawCircle_Bresenham_150_250(centerX, centerY, radius);
     glEnd();
+
+    // sector from theta1 to theta2
+    glBegin(GL_LINES);
+    glVertex2f(centerX,centerY );
+    glVertex2f(centerX + radius * cos(150 * M_PI / 180.0), centerY + radius * sin(150 * M_PI / 180.0));
+    glVertex2f(centerX, centerY);
+    glVertex2f(centerX + radius * cos(250 * M_PI / 180.0), centerY + radius * sin(250 * M_PI / 180.0));
+    glEnd();
+
     glFlush();
 
 }
