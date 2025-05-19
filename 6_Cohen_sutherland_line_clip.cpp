@@ -7,11 +7,11 @@ const int x_min = -100, y_min = -100;
 const int x_max = 100,  y_max = 100;
 
 // Region codes (4-bit)
-const int INSIDE = 0;
-const int LEFT   = 1;
-const int RIGHT  = 2;
-const int BOTTOM = 4;
-const int TOP    = 8;
+const int INSIDE = 0;   //0000
+const int LEFT   = 1;   //0001
+const int RIGHT  = 2;   //0010
+const int BOTTOM = 4;   //0100
+const int TOP    = 8;   //1000
 
 // Function to compute the region code for a point (x, y)
 int computeCode(double x, double y) {
@@ -30,14 +30,14 @@ bool CohenSutherlandClip(double &x1, double &y1, double &x2, double &y2) {
     bool accept = false;
 
     while (true) {
-        if (code1 == 0 && code2 == 0) {
+        if (code1 == 0 && code2 == 0) {  //both true , fully visible
             accept = true;
             break;
-        } else if (code1 & code2) {
+        } else if (code1 & code2) {  // not visible, single &
             break;
-        } else {
+        } else {  //clipping candidate
             double x, y;
-            int codeOut = code1 ? code1 : code2;
+            int codeOut = code1 ? code1 : code2;  //if code1=1, code1, else code2
             double slope = (x2 - x1) != 0 ? (y2 - y1) / (x2 - x1) : 1e9;
 
             if (codeOut & TOP) {
