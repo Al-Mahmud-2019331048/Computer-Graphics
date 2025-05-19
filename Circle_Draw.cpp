@@ -1,5 +1,3 @@
-//Abdulla Al Mahmud
-
 #include <GL/glut.h>   // OpenGL Library for Rendering
 #include <cmath>
 #include <iostream>
@@ -19,11 +17,17 @@ void plotPoint(float x, float y)
 void drawCircle_Cartesian(int h, int k, int r)
 {
     int x, y;
-    for (x = -r; x <= r; x++)
+    for (x = 0; x <= r/sqrt(2); x++)
     {
         y = round(sqrt(r * r - x * x));
         plotPoint(h + x, k + y);
-        plotPoint(h + x, k - y);
+//        plotPoint(h + x, k - y);
+//        plotPoint(h - x, k + y);
+//        plotPoint(h - x, k - y);
+//        plotPoint(h + y, k + x);
+//        plotPoint(h + y, k - x);
+//        plotPoint(h - y, k + x);
+//        plotPoint(h - y, k - x);
     }
 }
 
@@ -31,11 +35,18 @@ void drawCircle_Cartesian(int h, int k, int r)
 void drawCircle_Polar(int h, int k, int r)
 {
     float theta;
-    for (theta = 0; theta <= 2 * M_PI; theta += 0.01)
+    for (theta = 0; theta <= M_PI/4; theta += 0.01)
     {
         int x = round(r * cos(theta));
         int y = round(r * sin(theta));
         plotPoint(h + x, k + y);
+//        plotPoint(h + x, k - y);
+//        plotPoint(h - x, k + y);
+//        plotPoint(h - x, k - y);
+//        plotPoint(h + y, k + x);
+//        plotPoint(h + y, k - x);
+//        plotPoint(h - y, k + x);
+//        plotPoint(h - y, k - x);
     }
 }
 
@@ -333,7 +344,7 @@ void display()
     glBegin(GL_POINTS);
 
     glColor3f(0.0, 0.0, 1.0); // Blue
-    drawCircle_Bresenham_150_250(centerX, centerY, radius);
+    drawCircle_Polar(centerX, centerY, radius);
 
     glEnd();
     glFlush();
