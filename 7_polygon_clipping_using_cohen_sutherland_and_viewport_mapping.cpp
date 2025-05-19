@@ -1,19 +1,18 @@
-#include <windows.h>
 #include <GL/glut.h>
 #include <iostream>
 
 using namespace std;
 
-
+//window boundaries
 const int x_min = 200, y_min = 250;
 const int x_max = 650,  y_max = 650;
 
+//viewport boundaries
 const int vx_min = 20, vy_min = 20;
 const int vx_max = 220,  vy_max = 120;
 
-double sx;
-double sy;
-
+const double sx = (vx_max - vx_min * 1.0)  / (x_max - x_min);
+const double sy = (vy_max - vy_min * 1.0) / (y_max - y_min);
 
 const int INSIDE = 0;
 const int LEFT   = 1;
@@ -130,7 +129,7 @@ void display()
 
 //    cout << "sx: " << sx << " sy: " << sy << endl;
 
-    // Draw the clipping window (green rectangle)
+    // Draw the viewport
     glColor3f(0.0, 1.0, 0.0);
     glBegin(GL_LINE_LOOP);
     glVertex2f(vx_min, vy_min);
@@ -139,12 +138,15 @@ void display()
     glVertex2f(vx_min, vy_max);
     glEnd();
 
+    // Draw the window (yellow)
+    glColor3f(1.0, 1.0, 0.0);
     glBegin(GL_LINE_LOOP);
     glVertex2f(x_min, y_min);
     glVertex2f(x_max, y_min);
     glVertex2f(x_max, y_max);
     glVertex2f(x_min, y_max);
     glEnd();
+
     // Draw the original lines (red)
     glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_LINES);
@@ -154,6 +156,7 @@ void display()
         glVertex2f(orig_lines[i][2], orig_lines[i][3]);
     }
     glEnd();
+
 
 
     glColor3f(1.0, 0.0, 0.0);
@@ -170,12 +173,14 @@ void display()
         {
             pair<double, double> p1 = windowToViewportMapping(clip_lines[i][0], clip_lines[i][1]);
             pair<double, double> p2 = windowToViewportMapping(clip_lines[i][2], clip_lines[i][3]);
+            //draw the clipped lines in window
+            glColor3f(1.0, 0.0, 1.0);
             glVertex2f(clip_lines[i][0], clip_lines[i][1]);
             glVertex2f(clip_lines[i][2], clip_lines[i][3]);
 
             cout << p1.first << " " << p1.second << endl;
             cout << p2.first << " " << p2.second << endl;
-
+            //draw the clipped lines in viewport
             glVertex2f(p1.first, p1.second);
             glVertex2f(p2.first, p2.second);
         }
@@ -195,8 +200,6 @@ void init()
 
 int main(int argc, char** argv)
 {
-    sx = (vx_max - vx_min * 1.0)  / (x_max - x_min);
-    sy = (vy_max - vy_min * 1.0) / (y_max - y_min);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(500, 500);
