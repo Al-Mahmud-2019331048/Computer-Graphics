@@ -95,42 +95,6 @@ void drawCircle_Bresenham_0_45(int h, int k, int r)
     }
 }
 
-void drawCircle_Bresenham_15_601(int h,int k,int r)
-{
-    // 60 to 45
-    int x=(r * cos(60*M_PI/180.0));
-    int y=(r * sin(60*M_PI/180.0));
-    int d = 3 - 2 * r;
-    while(x<=y)
-    {
-        setPixel(h + x, k + y);
-        if (d < 0)
-            d += 4 * x + 6;
-        else
-        {
-            d += 4 * (x - y) + 10;
-            y--;
-        }
-        x++;
-    }
-    // 15 to 45
-    x=(r * cos(15*M_PI/180.0));
-    y=(r * sin(15*M_PI/180.0));
-    d = 3 - 2 * r;
-    while(y<=x)
-    {
-        setPixel(h + x, k + y);
-        if (d < 0)
-            d += 4 * y + 6;
-        else
-        {
-            d += 4 * (y - x) + 10;
-            x--;
-        }
-        y++;
-    }
-}
-
 
 void drawCircle_Bresenham_15_60(int h,int k,int r)
 {
