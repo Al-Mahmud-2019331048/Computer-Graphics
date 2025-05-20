@@ -16,18 +16,20 @@ void setPixel(float x, float y)
 void polynomial_method(double a, double b, double h, double k)
 {
     float x, y;
-    for (x = h - a; x <= h + a; x += 0.01)    // Loop over x from h-a to h+a
+    for (x = 0; x <= a; x += 0.01)  // Loop only in first quadrant and reflect
     {
-        if ((x - h) * (x - h) <= a * a)    // Check if x is within the valid range
-        {
-            y = k + b * sqrt(1 - (x - h) * (x - h) / (a * a)); // Upper half of the ellipse
-            glVertex2f(x, y);  // Plot upper half
-            y = k - b * sqrt(1 - (x - h) * (x - h) / (a * a)); // Lower half of the ellipse
-            glVertex2f(x, y);  // Plot lower half
-        }
-    }
+        float term = 1 - (x * x) / (a * a);
+        if (term < 0) continue;  // skip invalid sqrt
+        y = b * sqrt(term);
 
+        // Plot 4 symmetric points
+        setPixel(h + x, k + y);
+        setPixel(h - x, k + y);
+        setPixel(h + x, k - y);
+        setPixel(h - x, k - y);
+    }
 }
+
 
 // Trigonometric method for ellipse
 void trigonometric_method(double a, double b, double h, double k)
