@@ -4,83 +4,74 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void setPixel(float x,float y){
+void setPixel(float x, float y)
+{
     glVertex3f(x,y,0.0);
 }
 
-void directEquation(double x1,double y1,double x2, double y2){
-
-    if(x1==x2){
-        double y_mini=min(y1,y2);
-        double y_maxi=max(y1,y2);
-        for(double y=y_mini;y<y_maxi;y++) setPixel(x1,y);
+void directEqn(double x1, double y1, double x2, double y2)
+{
+    if(x1==x2)
+    {
+        for(double y=min(y1,y2); y<=max(y1,y2); y++) setPixel(x1,y);
         return;
     }
 
     double m=(y2-y1)/(x2-x1);
     double c=y1-m*x1;
 
-    if(fabs(m) <= 1){
-        double x_st=min(x1,x2);
-        double x_end=max(x1,x2);
-
-        for(double x=x_st;x<=x_end;x++){
-            double y=m*x+c;
+    if(fabs(m)<=1){
+        double y;
+        for(double x=min(x1,x2);x<=max(x1,x2);x++){
+            y=m*x+c;
             setPixel(x,y);
         }
     }
     else{
-        double y_st=min(y1,y2);
-        double y_end=max(y1,y2);
-
-        for(double y=y_st;y<=y_end;y++){
-            double x=(y-c)/m;
+        double x;
+        for(double y=min(y1,y2);y<=max(y1,y2);y++){
+            x=(y-c)/m;
             setPixel(x,y);
         }
     }
-
 }
 
-void DDA(double x1,double y1,double x2,double y2)
-{
+void DDA(double x1,double y1,double x2,double y2){
     double dx=x2-x1;
     double dy=y2-y1;
 
     double m=dy/dx;
 
-    if(fabs(m) <=1 ){
+    if(fabs(m)<=1){
         double y=y1;
-        for(double x=x1;x<=x2;x++){
+        for(double x=x1;x<x2;x++){
             setPixel(x,y);
-            x++;
             y+=m;
         }
     }
     else{
         double x=x1;
         for(double y=y1;y<=y2;y++){
-            setPixel(x,y);
-            y++;
-            x+=(1/m);
+            setPixel(-y,x);
+            x+=1/m;
         }
     }
 }
 
-void bresenham(double x1,double y1, double x2, double y2){
+void bresenham(double x1, double y1, double x2, double y2){
+    double x=x1,y=y1;
     double dx=x2-x1;
     double dy=y2-y1;
     double d=2*dy-dx;
 
-    double x=x1,y=y1;
-
     while(x<=x2){
-        setPixel(-y,x);
+        setPixel(-x,y);
         if(d<0){
-            d+=2*dy; x++;
+            dx+=2*dy; x++;
         }
         else{
-            d+= 2*(dy-dx);
-            x++; y++;
+            dx+=2*(dy-dx);
+            x++;y++;
         }
     }
 }
@@ -88,8 +79,8 @@ void bresenham(double x1,double y1, double x2, double y2){
 static void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(0.0,1.0,0.0);
 
+    glColor3f(0.0,1.0,0.0);
     glBegin(GL_LINES);
     glVertex2f(-100, 0);
     glVertex2f(100, 0); // X-axis
@@ -99,7 +90,7 @@ static void display(void)
 
     glBegin(GL_POINTS);
     int c=5;
-    bresenham(-6.0 * c, -1.0 * c, 6.0 * c, 1 * c);
+    bresenham(-6.0 * c, 1.0 * c, 6.0 * c, 10 * c);
     glEnd();
     glFlush();
 }
@@ -108,16 +99,24 @@ static void display(void)
 void init()
 {
     glClearColor(0.0,0.0,0.0,0.0);
-    glOrtho(-100,100,-100,100,-2,2);
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+    glOrtho(-100,100,-100,100,-2.0,2.0);
 }
 
-int main(int argc, char *argv[]){
+
+int main(int argc,char *argv[])
+{
     glutInit(&argc, argv);
     glutInitWindowSize(1024,1024);
-    glutInitWindowPosition(10, 10);
+    glutInitWindowPosition(10,10);
 
-    glutCreateWindow("Graphics:");
+    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+    glutCreateWindow("Compiler");
+
     init();
+
     glutDisplayFunc(display);
     glutMainLoop();
 
